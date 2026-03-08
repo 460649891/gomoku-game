@@ -12,6 +12,7 @@ export function useGomoku() {
   const boardState = ref(createEmptyBoard())
   const currentPlayer = ref(BLACK)
   const isGameOver = ref(false)
+  const isDraw = ref(false)
   const winner = ref(EMPTY)
   const winningPath = ref([])
   const lastMove = ref(null)
@@ -46,6 +47,14 @@ export function useGomoku() {
       return
     }
 
+    // 若棋盘已满且无人获胜，则立即判定为平局。
+    if (moveCount.value === BOARD_SIZE * BOARD_SIZE) {
+      isDraw.value = true
+      isGameOver.value = true
+      gameMessage.value = '棋盘已满，本局平局。'
+      return
+    }
+
     currentPlayer.value = player === BLACK ? WHITE : BLACK
     gameMessage.value = `请${getPlayerLabel(currentPlayer.value)}落子。`
   }
@@ -58,8 +67,8 @@ export function useGomoku() {
 
     const last = moveHistory.value.pop()
     boardState.value[last.row][last.col] = EMPTY
-    
-    // 恢复到上一步的状态
+
+    // 恢复到上一步的状态。
     if (moveHistory.value.length > 0) {
       const prev = moveHistory.value[moveHistory.value.length - 1]
       lastMove.value = { row: prev.row, col: prev.col }
@@ -68,8 +77,9 @@ export function useGomoku() {
       lastMove.value = null
       currentPlayer.value = BLACK
     }
-    
+
     isGameOver.value = false
+    isDraw.value = false
     winner.value = EMPTY
     winningPath.value = []
     gameMessage.value = `已撤销落子。请${getPlayerLabel(currentPlayer.value)}落子。`
@@ -86,10 +96,10 @@ export function useGomoku() {
     for (const [rowStep, colStep] of directions) {
       const forward = getContinuousPieces(row, col, rowStep, colStep, playerValue)
       const backward = getContinuousPieces(row, col, -rowStep, -colStep, playerValue)
-      
+
       // forward 和 backward 都包含了起始点 (row, col)
       const path = [...forward, ...backward.slice(1)]
-      
+
       if (path.length >= 5) {
         return path
       }
@@ -118,6 +128,7 @@ export function useGomoku() {
     boardState.value = createEmptyBoard()
     currentPlayer.value = BLACK
     isGameOver.value = false
+    isDraw.value = false
     winner.value = EMPTY
     winningPath.value = []
     lastMove.value = null
@@ -129,6 +140,7 @@ export function useGomoku() {
     boardState,
     currentPlayer,
     isGameOver,
+    isDraw,
     winner,
     winningPath,
     lastMove,
