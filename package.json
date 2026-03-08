@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --experimental-vm-modules tests/draw.test.js"
   },
   "dependencies": {
     "element-plus": "^2.13.5",

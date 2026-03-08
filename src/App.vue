@@ -8,6 +8,7 @@ const {
   boardState,
   currentPlayer,
   isGameOver,
+  isDraw,
   winner,
   winningPath,
   lastMove,
@@ -20,13 +21,22 @@ const {
 } = useGomoku()
 
 const currentPlayerLabel = computed(() => getPlayerLabel(currentPlayer.value))
-const winnerLabel = computed(() =>
-  winner.value === EMPTY ? '未分胜负' : `${getPlayerLabel(winner.value)}获胜`
-)
-const alertType = computed(() => (winner.value !== EMPTY ? 'success' : 'info'))
-const gameStatusLabel = computed(() =>
-  winner.value !== EMPTY ? '对局已结束' : '对局进行中'
-)
+// 平局时单独展示结果文案，避免仍显示“未分胜负”。
+const winnerLabel = computed(() => {
+  if (isDraw.value) {
+    return '本局平局'
+  }
+
+  return winner.value === EMPTY ? '未分胜负' : `${getPlayerLabel(winner.value)}获胜`
+})
+const alertType = computed(() => (winner.value !== EMPTY || isDraw.value ? 'success' : 'info'))
+const gameStatusLabel = computed(() => {
+  if (isDraw.value) {
+    return '平局'
+  }
+
+  return winner.value !== EMPTY ? '对局已结束' : '对局进行中'
+})
 const canUndo = computed(() => moveCount.value > 0 && !isGameOver.value)
 </script>
 
