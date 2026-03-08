@@ -1,0 +1,160 @@
+:root {
+  --board-size: 600px;
+  --cell-count: 15;
+  --line-color: #6b4423;
+  --board-color: #d8a35d;
+  --panel-bg: #fffaf1;
+  --text-color: #2f241b;
+  --shadow-color: rgba(47, 36, 27, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Microsoft YaHei", sans-serif;
+  background: linear-gradient(180deg, #f6e7c7 0%, #eed2a5 100%);
+  color: var(--text-color);
+}
+
+.game-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.game-panel {
+  width: min(100%, 760px);
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--panel-bg);
+  box-shadow: 0 16px 40px var(--shadow-color);
+}
+
+.game-title {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 32px;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.status-text {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  width: min(100%, var(--board-size));
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cell-count), 1fr);
+  grid-template-rows: repeat(var(--cell-count), 1fr);
+  padding: 16px;
+  background: var(--board-color);
+  border: 4px solid #8d6031;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* 用伪元素绘制棋盘网格线 */
+.cell::before,
+.cell::after {
+  content: "";
+  position: absolute;
+  background-color: var(--line-color);
+}
+
+.cell::before {
+  width: 100%;
+  height: 1px;
+}
+
+.cell::after {
+  width: 1px;
+  height: 100%;
+}
+
+.piece {
+  position: relative;
+  z-index: 1;
+  width: 72%;
+  height: 72%;
+  border-radius: 50%;
+  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.2), inset 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.piece.black {
+  background: radial-gradient(circle at 30% 30%, #666 0%, #111 65%, #000 100%);
+}
+
+.piece.white {
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #f1f1f1 60%, #d8d8d8 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.restart-button {
+  display: block;
+  margin: 24px auto 0;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #7d4d1f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.restart-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(125, 77, 31, 0.25);
+}
+
+.restart-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 720px) {
+  .game-panel {
+    padding: 20px;
+  }
+
+  .game-title {
+    font-size: 26px;
+  }
+
+  .status-text {
+    font-size: 16px;
+  }
+
+  .board {
+    padding: 12px;
+  }
+}
